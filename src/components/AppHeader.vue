@@ -1,9 +1,9 @@
 <template>
   <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container">
-      <a class="navbar-brand fs-4 text-success" href="#"
+      <router-link class="navbar-brand fs-4 text-success" to="/"
         ><i class="fa-solid fa-book"></i
-      ></a>
+      ></router-link>
       <button
         class="navbar-toggler"
         type="button"
@@ -18,40 +18,88 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav nav-tabs d-none d-lg-flex">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#"
-              >Quản lý Sách</a
+            <router-link
+              :class="{ active: this.$route.name == 'books' }"
+              class="nav-link"
+              aria-current="page"
+              to="/"
+              >Quản lý Sách</router-link
             >
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Quản lý người dùng</a>
+            <router-link
+              :class="{ active: this.$route.name == 'readers' }"
+              class="nav-link"
+              to="/readers"
+              >Quản lý đọc giả</router-link
+            >
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Theo dõi mượn sách</a>
+            <router-link
+              :class="{ active: this.$route.name == 'borrowTrackers' }"
+              class="nav-link"
+              to="/borrowTrackers"
+              >Theo dõi mượn sách</router-link
+            >
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Quản lý nhân viên</a>
+            <router-link
+              :class="{ active: this.$route.name == 'staffs' }"
+              class="nav-link"
+              to="/staffs"
+              >Quản lý nhân viên</router-link
+            >
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Quản lý nhà xuất bản</a>
+            <router-link
+              :class="{ active: this.$route.name == 'publishers' }"
+              class="nav-link"
+              to="/publishers"
+              >Quản lý nhà xuất bản</router-link
+            >
           </li>
         </ul>
         <ul class="navbar-nav d-lg-none">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#"
-              >Quản lý Sách</a
+            <router-link
+              :class="{ active: this.$route.name == 'books' }"
+              class="nav-link"
+              aria-current="page"
+              to="/"
+              >Quản lý Sách</router-link
             >
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Quản lý người dùng</a>
+            <router-link
+              :class="{ active: this.$route.name == 'readers' }"
+              class="nav-link"
+              to="/readers"
+              >Quản lý đọc giả</router-link
+            >
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Theo dõi mượn sách</a>
+            <router-link
+              :class="{ active: this.$route.name == 'borrowTrackers' }"
+              class="nav-link"
+              to="/borrowTrackers"
+              >Theo dõi mượn sách</router-link
+            >
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Quản lý nhân viên</a>
+            <router-link
+              :class="{ active: this.$route.name == 'staffs' }"
+              class="nav-link"
+              to="/staffs"
+              >Quản lý nhân viên</router-link
+            >
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Quản lý nhà xuất bản</a>
+            <router-link
+              :class="{ active: this.$route.name == 'publishers' }"
+              class="nav-link"
+              to="/publishers"
+              >Quản lý nhà xuất bản</router-link
+            >
           </li>
         </ul>
       </div>

@@ -1,24 +1,21 @@
 <script>
 //configure here
-import BookService from "@/services/book.service"
-import BookForm from "@/components/BookForm.vue"
+import staffService from "@/services/staff.service"
+import StaffForm from "@/components/StaffForm.vue"
 
 const fieldList = [
-  "MaSach",
-  "TenSach",
-  "DonGia",
-  "SoQuyen",
-  "DangYeuCau",
-  "DangMuon",
-  "NamXuatBan",
-  "MaNXB",
-  "NguonGoc/TacGia",
+  "MSNV",
+  "HoTenNV",
+  "Password",
+  "ChucVu",
+  "DiaChi",
+  "SoDienThoai",
 ]
-const rawName = "book"
-const objectName = "Sách"
-const mainField = "TenSach"
-const service = BookService
-const ThisForm = BookForm
+const rawName = "staff"
+const objectName = "Nhân viên"
+const mainField = "HoTenNV"
+const service = staffService
+const ThisForm = StaffForm
 ////////////////////////////////////////////////////////////////////////
 import ObjectList from "@/components/ObjectList.vue"
 import InputSearch from "@/components/InputSearch.vue"
@@ -72,10 +69,10 @@ export default {
     async createObject(data) {
       try {
         let result = await service.create(data)
+
         if (result.status == true) {
           alert("Tạo thành công!")
         } else alert(result.message)
-
         this.create = false
         this.refreshList()
       } catch (error) {
@@ -85,8 +82,12 @@ export default {
     async updateObject(id, data) {
       try {
         let result = await service.update(id, data)
+        if (result.status == true) {
+          if (result.status == true) {
+            alert("Cập nhật thành công!")
+          } else alert(result.message)
+        } else alert(result.message)
 
-        alert("Cập nhật thành công!")
         this.refreshList()
       } catch (error) {
         alert(error.response.data.message)
@@ -97,8 +98,8 @@ export default {
         try {
           let result = await service.delete(id)
           if (result.status == true) {
-          alert("Xóa thành công!")
-        } else alert(result.message)
+            alert("Xóa thành công!")
+          } else alert(result.message)
           this.refreshList()
         } catch (error) {
           alert(error.response.data.message)

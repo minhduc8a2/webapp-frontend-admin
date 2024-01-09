@@ -1,24 +1,14 @@
 <script>
 //configure here
-import BookService from "@/services/book.service"
-import BookForm from "@/components/BookForm.vue"
+import publisherService from "@/services/publisher.service"
+import PublisherForm from "@/components/PublisherForm.vue"
 
-const fieldList = [
-  "MaSach",
-  "TenSach",
-  "DonGia",
-  "SoQuyen",
-  "DangYeuCau",
-  "DangMuon",
-  "NamXuatBan",
-  "MaNXB",
-  "NguonGoc/TacGia",
-]
-const rawName = "book"
-const objectName = "Sách"
-const mainField = "TenSach"
-const service = BookService
-const ThisForm = BookForm
+const fieldList = ["MaNXB", "TenNXB", "DiaChi"]
+const rawName = "publisher"
+const objectName = "Nhà xuất bản"
+const mainField = "TenNXB"
+const service = publisherService
+const ThisForm = PublisherForm
 ////////////////////////////////////////////////////////////////////////
 import ObjectList from "@/components/ObjectList.vue"
 import InputSearch from "@/components/InputSearch.vue"
@@ -72,10 +62,10 @@ export default {
     async createObject(data) {
       try {
         let result = await service.create(data)
+
         if (result.status == true) {
           alert("Tạo thành công!")
         } else alert(result.message)
-
         this.create = false
         this.refreshList()
       } catch (error) {
@@ -86,7 +76,9 @@ export default {
       try {
         let result = await service.update(id, data)
 
-        alert("Cập nhật thành công!")
+        if (result.status == true) {
+          alert("Cập nhật thành công!")
+        } else alert(result.message)
         this.refreshList()
       } catch (error) {
         alert(error.response.data.message)
@@ -97,8 +89,8 @@ export default {
         try {
           let result = await service.delete(id)
           if (result.status == true) {
-          alert("Xóa thành công!")
-        } else alert(result.message)
+            alert("Xóa thành công!")
+          } else alert(result.message)
           this.refreshList()
         } catch (error) {
           alert(error.response.data.message)
@@ -126,9 +118,6 @@ export default {
           alert(error.response.data.message)
         }
       }
-    },
-    goToAddObject() {
-      this.$router.push({ name: `${rawName}.add` })
     },
   },
   mounted() {

@@ -2,42 +2,21 @@
 import * as yup from "yup"
 /// configure here
 const fieldList = [
-  { fullName: "Mã Sách", field: "MaSach", type: "text", min: 1 },
-  { fullName: "Tên Sách", field: "TenSach", type: "text", min: 1 },
-  { fullName: "Đơn Giá", field: "DonGia", type: "number", min: 1 },
-  { fullName: "Số Quyển", field: "SoQuyen", type: "number", min: 1 },
-  {
-    fullName: "Số lượng yêu cầu mượn",
-    field: "DangYeuCau",
-    type: "number",
-    min: 0,
-  },
-  {
-    fullName: "Số lượng đang được mượn",
-    field: "DangMuon",
-    type: "number",
-    min: 0,
-  },
-  { fullName: "Năm xuất bản", field: "NamXuatBan", type: "myDate" },
-  {
-    fullName: "Mã nhà xuất bản",
-    field: "MaNXB",
-    type: "text",
-    min: 1,
-  },
-  {
-    fullName: "Nguồn gốc/ tác giả",
-    field: "NguonGoc/TacGia",
-    type: "text",
-    min: 1,
-  },
+  { fullName: "Mã đọc giả", field: "MaDocGia", type: "text", min: 1 },
+  { fullName: "Họ lót", field: "HoLot", type: "text", min: 1 },
+  { fullName: "Tên", field: "Ten", type: "text", min: 1 },
+  { fullName: "Ngày sinh", field: "NgaySinh", type: "myDate", min: 1 },
+  { fullName: "Giới tính", field: "Phai", type: "text", min: 1 },
+  { fullName: "Địa chỉ", field: "DiaChi", type: "text", min: 1 },
+  { fullName: "Số điện thoại", field: "DienThoai", type: "text", min: 10 },
+  { fullName: "Mật khẩu", field: "Password", type: "password", min: 8 },
 ]
 
 ////
 function createYupObject() {
   let result = {}
   fieldList.forEach((field) => {
-    if (field.type == "text") {
+    if (field.type == "text" || field.type == "password") {
       result[field.field] = yup
         .string()
         .required(`${field.fullName} phải có giá trị.`)
@@ -125,7 +104,6 @@ export default {
     <h2 v-else class="text-center">
       Thêm <span class="text-lowercase">{{ objectName }}</span> mới
     </h2>
-
     <div class="form-group mt-3" v-for="(field, index) in fieldList">
       <label :for="field.field">{{ field.fullName }}</label>
       <Field

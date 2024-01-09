@@ -1,24 +1,14 @@
 <script>
 //configure here
-import BookService from "@/services/book.service"
-import BookForm from "@/components/BookForm.vue"
+import borrowTrackerService from "@/services/borrowTracker.service"
+import BorrowTrackerForm from "@/components/BorrowTrackerForm.vue"
 
-const fieldList = [
-  "MaSach",
-  "TenSach",
-  "DonGia",
-  "SoQuyen",
-  "DangYeuCau",
-  "DangMuon",
-  "NamXuatBan",
-  "MaNXB",
-  "NguonGoc/TacGia",
-]
-const rawName = "book"
-const objectName = "Sách"
-const mainField = "TenSach"
-const service = BookService
-const ThisForm = BookForm
+const fieldList = ["MaDocGia", "MaSach", "NgayMuon", "NgayTra", "TrangThai"]
+const rawName = "borrowTracker"
+const objectName = "Theo dõi mượn sách"
+const mainField = "MaDocGia"
+const service = borrowTrackerService
+const ThisForm = BorrowTrackerForm
 ////////////////////////////////////////////////////////////////////////
 import ObjectList from "@/components/ObjectList.vue"
 import InputSearch from "@/components/InputSearch.vue"
@@ -72,10 +62,10 @@ export default {
     async createObject(data) {
       try {
         let result = await service.create(data)
+
         if (result.status == true) {
           alert("Tạo thành công!")
         } else alert(result.message)
-
         this.create = false
         this.refreshList()
       } catch (error) {
@@ -86,7 +76,9 @@ export default {
       try {
         let result = await service.update(id, data)
 
-        alert("Cập nhật thành công!")
+        if (result.status == true) {
+          alert("Cập nhật thành công!")
+        } else alert(result.message)
         this.refreshList()
       } catch (error) {
         alert(error.response.data.message)
@@ -97,8 +89,8 @@ export default {
         try {
           let result = await service.delete(id)
           if (result.status == true) {
-          alert("Xóa thành công!")
-        } else alert(result.message)
+            alert("Xóa thành công!")
+          } else alert(result.message)
           this.refreshList()
         } catch (error) {
           alert(error.response.data.message)

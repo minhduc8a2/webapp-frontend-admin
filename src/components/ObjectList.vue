@@ -1,5 +1,4 @@
 <script>
-import { onMounted } from "vue"
 export default {
   props: {
     objectList: { type: Array, default: [] },
@@ -17,7 +16,6 @@ export default {
   created() {
     console.log(this.objectList)
   },
- 
 }
 </script>
 <template>
@@ -29,15 +27,7 @@ export default {
       :key="item._id"
       @click="updateActiveIndex(index)"
     >
-      {{ item._id }}
-      <router-link
-        :to="{
-          name: `${rawObjectName}.edit`,
-          params: { id: item._id.toString() },
-        }"
-      >
-        {{ item[mainField] }}
-      </router-link>
+      {{ item[mainField] }}
     </li>
   </ul>
 </template>

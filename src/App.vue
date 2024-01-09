@@ -20,5 +20,7 @@ ul {
 }
 a {
   text-decoration: none;
+  color: unset;
 }
+
 </style>

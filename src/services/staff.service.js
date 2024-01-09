@@ -8,6 +8,9 @@ class StaffService {
   async getAll() {
     return (await this.api.get("/")).data
   }
+  async login(data) {
+    return (await this.api.post("/login", data)).data
+  }
   async create(data) {
     return (await this.api.post("/", data)).data
   }

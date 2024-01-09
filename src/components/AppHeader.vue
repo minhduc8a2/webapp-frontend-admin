@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container">
-      <router-link class="navbar-brand fs-4 text-success" to="/"
+      <router-link class="navbar-brand fs-4 text-success" to="/books"
         ><i class="fa-solid fa-book"></i
       ></router-link>
       <button
@@ -22,7 +22,7 @@
               :class="{ active: this.$route.name == 'books' }"
               class="nav-link"
               aria-current="page"
-              to="/"
+              to="/books"
               >Quản lý Sách</router-link
             >
           </li>
@@ -65,7 +65,7 @@
               :class="{ active: this.$route.name == 'books' }"
               class="nav-link"
               aria-current="page"
-              to="/"
+              to="/books"
               >Quản lý Sách</router-link
             >
           </li>
@@ -102,6 +102,7 @@
             >
           </li>
         </ul>
+        <button class="btn btn-danger ms-4">Đăng xuất</button>
       </div>
     </div>
   </nav>

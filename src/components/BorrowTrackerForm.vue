@@ -34,9 +34,10 @@ const fieldList = [
   {
     fullName: "Trạng thái",
     field: "TrangThai",
-    type: "text",
+    type: "enum",
     min: 1,
     readonly: false,
+    regex: "Cancelled|Pending|Accepted|Borrowed|Returned",
   },
 ]
 
@@ -61,6 +62,13 @@ function createYupObject() {
       result[field.field] = yup
         .string()
         .matches(/^\d{2}\/\d{2}\/\d{4}$/, "Ngày không hợp lệ")
+    } else if (field.type == "enum") {
+      result[field.field] = yup
+        .string()
+        .matches(
+          `^(${field.regex})$`,
+          "Phải thuộc 1 trong các giá trị " + field.regex.split("|").join(", ")
+        )
     }
   })
   return result
@@ -136,7 +144,7 @@ export default {
     <div
       class="form-group mt-3"
       v-for="(field, index) in fieldList"
-      :class="{ 'pe-none opacity-75': field.readonly }"
+      :class="{ 'pe-none opacity-75': field.readonly && mode == 'edit' }"
     >
       <label :for="field.field">{{ field.fullName }}</label>
       <Field

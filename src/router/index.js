@@ -71,6 +71,7 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   const logined = store.getters.logined
   // next-line: check if route ("to" object) needs authenticated
+  
   if (to.name !== "login" && !logined) next({ name: "login" })
   else next()
 })

@@ -19,14 +19,27 @@ const store = createStore({
   },
   actions: {
     async login({ commit }, authData) {
-      let result = await staffService.login({
-        username: authData.username,
-        password: authData.password,
-      })
+      if (authData) {
+        var result = await staffService.login({
+          username: authData.username,
+          password: authData.password,
+        })
+      } else {
+        var result = await staffService.login({})
+      }
       if (result.status == true) {
+        localStorage.setItem("library_token", result.data)
         commit("setLogined", true)
         router.push({ name: "home" })
       }
+    },
+    async logout({ commit }) {
+      console.log("logout")
+      commit("setLogined", false)
+      localStorage.removeItem("library_token")
+      console.log(localStorage.getItem("library_token"))
+
+      router.push({ name: "login" })
     },
   },
 })

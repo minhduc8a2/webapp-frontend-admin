@@ -12,12 +12,14 @@ const ThisForm = BorrowTrackerForm
 ////////////////////////////////////////////////////////////////////////
 import ObjectList from "@/components/ObjectList.vue"
 import InputSearch from "@/components/InputSearch.vue"
+import MoreInfo from "@/components/MoreInfo.vue"
 
 export default {
   components: {
     ObjectList,
     ThisForm,
     InputSearch,
+    MoreInfo,
   },
   data() {
     return {
@@ -159,6 +161,11 @@ export default {
         />
       </div>
       <div class="col-6">
+        <MoreInfo
+          :bookId="filteredList[activeIndex].MaSach"
+          :readerId="filteredList[activeIndex].MaDocGia"
+          v-if="filteredListCount > 0 && activeIndex >= 0"
+        />
         <ThisForm
           mode="edit"
           :currentObject="filteredList[activeIndex]"

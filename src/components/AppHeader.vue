@@ -1,3 +1,13 @@
+<script>
+export default {
+  methods: {
+    logout() {
+      this.$store.dispatch("logout")
+    },
+  },
+}
+</script>
+
 <template>
   <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container">
@@ -102,7 +112,13 @@
             >
           </li>
         </ul>
-        <button class="btn btn-danger ms-4">Đăng xuất</button>
+        <button
+          class="btn btn-danger ms-4"
+          @click="logout"
+          v-if="this.$store.state.logined"
+        >
+          Đăng xuất
+        </button>
       </div>
     </div>
   </nav>

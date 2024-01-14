@@ -1,6 +1,7 @@
 import { createStore } from "vuex"
-import staffService from "@/services/staff.service"
 import router from "@/router/index"
+import staffService from "@/services/staff.service"
+
 const store = createStore({
   state() {
     return {
@@ -19,18 +20,23 @@ const store = createStore({
   },
   actions: {
     async login({ commit }, authData) {
-      if (authData) {
-        var result = await staffService.login({
-          username: authData.username,
-          password: authData.password,
-        })
-      } else {
-        var result = await staffService.login({})
-      }
-      if (result.status == true) {
-        localStorage.setItem("library_token", result.data)
-        commit("setLogined", true)
-        router.push({ name: "home" })
+      try {
+        if (authData) {
+          var result = await staffService.login({
+            username: authData.username,
+            password: authData.password,
+          })
+        } else {
+          var result = await staffService.login({})
+        }
+        if (result.status == true) {
+          localStorage.setItem("library_token", result.data)
+          commit("setLogined", true)
+          router.push({ name: "home" })
+        }
+        return result
+      } catch (error) {
+        console.log(error)
       }
     },
     async logout({ commit }) {

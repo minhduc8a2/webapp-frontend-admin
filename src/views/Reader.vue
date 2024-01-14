@@ -95,6 +95,19 @@ export default {
         alert(error.response.data.message)
       }
     },
+    async deleteAll() {
+      if (confirm("Bạn chắc chắn muốn xóa tất cả?")) {
+        try {
+          let result = await service.deleteAll()
+          if (result.status == true) {
+            alert("Xóa thành công!")
+          } else alert(result.message)
+          this.refreshList()
+        } catch (error) {
+          alert(error.response.data.message)
+        }
+      }
+    },
     async deleteObject(id) {
       if (confirm("Bạn chắc chắn muốn xóa?")) {
         try {
@@ -159,7 +172,11 @@ export default {
             <span v-else><i class="fa-solid fa-xmark"></i> Hủy</span>
           </button>
         </div>
-
+        <hr class="my-4" />
+        <button class="btn btn-danger" @click="deleteAll">
+          <i class="fa-solid fa-triangle-exclamation"></i> Xóa tất cả
+          <span class="text-lowercase">{{ objectName }} trong danh sách</span>
+        </button>
         <hr class="my-4" />
         <ObjectList
           v-if="filteredListCount > 0 && !create"

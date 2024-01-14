@@ -1,5 +1,6 @@
 <script>
 import * as yup from "yup"
+import other from "@/helper/other"
 /// configure here
 const fieldList = [
   { fullName: "Mã Sách", field: "MaSach", type: "text", min: 1 },
@@ -65,12 +66,7 @@ function createEmptyObject() {
     if (field.type == "text") result[field.field] = ""
     else if (field.type == "number") result[field.field] = 0
     else if (field.type == "myDate") {
-      let currentDate = new Date()
-      let day = currentDate.getDate().toString().padStart(2, "0")
-      let month = (currentDate.getMonth() + 1).toString().padStart(2, "0")
-      let year = currentDate.getFullYear()
-
-      result[field.field] = day + "/" + month + "/" + year
+      result[field.field] = new Date().toString()
     }
   })
   return result
@@ -93,23 +89,42 @@ export default {
   data() {
     const objectFormSchema = yup.object().shape(createYupObject())
     return {
-      objectLocal: this.currentObject || createEmptyObject(),
+      other,
+      objectLocal: this.currentObject
+        ? { ...this.currentObject }
+        : createEmptyObject(),
       objectFormSchema,
       fieldList: fieldList,
     }
   },
   methods: {
+    formatNamXuatBan() {
+      this.objectLocal.NamXuatBan = other.formatDate(
+        this.objectLocal.NamXuatBan
+      )
+    },
     submitObject() {
+      this.objectLocal.NamXuatBan = other.createDate(
+        this.objectLocal.NamXuatBan
+      )
       if (this.mode == "edit")
         this.$emit("submit:object", this.objectLocal._id, this.objectLocal)
       else this.$emit("submit:object", this.objectLocal)
+      //
+      this.formatNamXuatBan()
     },
     deleteObject() {
       this.$emit("delete:object", this.objectLocal._id)
     },
   },
+  created() {
+    this.formatNamXuatBan()
+  },
   updated() {
-    this.objectLocal = this.currentObject
+    ;(this.objectLocal = this.currentObject
+      ? { ...this.currentObject }
+      : createEmptyObject()),
+      this.formatNamXuatBan()
   },
 }
 </script>

@@ -54,7 +54,9 @@ export default {
     filteredList() {
       if (!this.searchText) return this.objectList
       return this.objectList.filter((item, index) =>
-        this.objectStrings[index].includes(this.searchText)
+        this.objectStrings[index]
+          .toLowerCase()
+          .includes(this.searchText.toLowerCase())
       )
     },
 

@@ -1,6 +1,7 @@
 <script>
 import * as yup from "yup"
 /// configure here
+import other from "@/helper/other"
 
 const fieldList = [
   {
@@ -61,14 +62,17 @@ function createYupObject() {
     } else if (field.type == "myDate") {
       result[field.field] = yup
         .string()
-        .matches(/^\d{2}\/\d{2}\/\d{4}$/, "Ngày không hợp lệ")
-    } else if (field.type == "enum") {
-      result[field.field] = yup
-        .string()
-        .matches(
-          `^(${field.regex})$`,
-          "Phải thuộc 1 trong các giá trị " + field.regex.split("|").join(", ")
-        )
+        .test("", "Ngày không hợp lệ", function (value) {
+          if (!value) return true
+          return value?.match(/^\d{2}\/\d{2}\/\d{4}$/) != null
+        })
+      if (field.field == "NgayMuon") {
+        result[field.field] = yup
+          .string()
+          .test("", "Ngày không hợp lệ", function (value) {
+            return value?.match(/^\d{2}\/\d{2}\/\d{4}$/) != null
+          })
+      }
     }
   })
   return result
@@ -79,15 +83,11 @@ function createEmptyObject() {
   fieldList.forEach((field) => {
     if (field.type == "text") result[field.field] = ""
     else if (field.type == "number") result[field.field] = 0
-    else if (field.type == "myDate") {
-      let currentDate = new Date()
-      let day = currentDate.getDate().toString().padStart(2, "0")
-      let month = (currentDate.getMonth() + 1).toString().padStart(2, "0")
-      let year = currentDate.getFullYear()
-
-      result[field.field] = day + "/" + month + "/" + year
+    else if (field.type == "myDate" && field.field == "NgayMuon") {
+      result[field.field] = new Date().toString()
     }
   })
+
   return result
 }
 import { Form, Field, ErrorMessage } from "vee-validate"
@@ -108,23 +108,45 @@ export default {
   data() {
     const objectFormSchema = yup.object().shape(createYupObject())
     return {
-      objectLocal: this.currentObject || createEmptyObject(),
+      objectLocal: this.currentObject
+        ? Object.assign({}, this.currentObject)
+        : createEmptyObject(),
       objectFormSchema,
       fieldList: fieldList,
+      other,
     }
   },
   methods: {
+    formatNgayMuonNgayTra() {
+      this.objectLocal.NgayMuon = other.formatDate(this.objectLocal.NgayMuon)
+      if (this.objectLocal.NgayTra)
+        this.objectLocal.NgayTra = other.formatDate(this.objectLocal.NgayTra)
+    },
     submitObject() {
+      console.log("submit")
+      this.objectLocal.NgayMuon = other.createDate(this.objectLocal.NgayMuon)
+      if (this.objectLocal.NgayTra)
+        this.objectLocal.NgayTra = other.createDate(this.objectLocal.NgayTra)
       if (this.mode == "edit")
         this.$emit("submit:object", this.objectLocal._id, this.objectLocal)
-      else this.$emit("submit:object", this.objectLocal)
+      else {
+        this.$emit("submit:object", this.objectLocal)
+      }
+      this.formatNgayMuonNgayTra()
     },
     deleteObject() {
       this.$emit("delete:object", this.objectLocal._id)
     },
   },
+  mounted() {
+    this.formatNgayMuonNgayTra()
+    console.log(this.objectLocal)
+  },
   updated() {
     this.objectLocal = this.currentObject
+      ? Object.assign({}, this.currentObject)
+      : createEmptyObject()
+    this.formatNgayMuonNgayTra()
   },
 }
 </script>
@@ -140,22 +162,39 @@ export default {
     <h2 v-else class="text-center">
       Thêm <span class="text-lowercase">{{ objectName }}</span> mới
     </h2>
-
-    <div
-      class="form-group mt-3"
-      v-for="(field, index) in fieldList"
-      :class="{ 'pe-none opacity-75': field.readonly && mode == 'edit' }"
-    >
-      <label :for="field.field">{{ field.fullName }}</label>
-      <Field
-        :name="field.field"
-        :type="field.type"
-        class="form-control mt-1"
-        v-model="objectLocal[field.field]"
-      />
-      <ErrorMessage :name="field.field" class="error-feedback" />
+    <div class="" v-for="(field, index) in fieldList">
+      <div
+        class="form-group mt-3"
+        :class="{ 'pe-none opacity-75': field.readonly && mode == 'edit' }"
+        v-if="field.type != 'enum'"
+      >
+        <label :for="field.field">{{ field.fullName }}</label>
+        <Field
+          :name="field.field"
+          :type="field.type"
+          class="form-control mt-1"
+          v-model="objectLocal[field.field]"
+        />
+        <ErrorMessage :name="field.field" class="error-feedback" />
+      </div>
     </div>
-
+    <div class="row g-2 my-4" v-if="mode == 'edit'">
+      <div class="col-4" v-for="(item, index) in Object.keys(other.bookStatus)">
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="flexRadioDefault"
+            :id="'submit - ' + index"
+            :value="item"
+            v-model="objectLocal.TrangThai"
+          />
+          <label class="form-check-label" :for="'submit - ' + index">
+            {{ other.bookStatus[item] }}
+          </label>
+        </div>
+      </div>
+    </div>
     <div class="form-group mt-4 d-flex gap-4">
       <button class="btn btn-primary">Lưu</button>
       <button

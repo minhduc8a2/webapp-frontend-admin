@@ -28,12 +28,20 @@ export default {
       try {
         let bookResult = await BookService.get(this.bookId)
         let readerResult = await ReaderService.get(this.readerId)
-        console.log(bookResult, readerResult)
+
         if (bookResult.status == true && readerResult.status == true) {
           this.book = bookResult.data
           this.reader = readerResult.data
+        } else {
+          this.book = null
+          this.reader = null
+          console.log("null")
         }
-      } catch (error) {}
+      } catch (error) {
+        this.book = null
+        this.reader = null
+        console.log("null")
+      }
     },
   },
   mounted() {

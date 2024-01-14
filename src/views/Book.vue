@@ -55,7 +55,9 @@ export default {
     filteredList() {
       if (!this.searchText) return this.objectList
       return this.objectList.filter((item, index) =>
-        this.objectStrings[index].includes(this.searchText)
+        this.objectStrings[index]
+          .toLowerCase()
+          .includes(this.searchText.toLowerCase())
       )
     },
 
@@ -97,8 +99,8 @@ export default {
         try {
           let result = await service.delete(id)
           if (result.status == true) {
-          alert("Xóa thành công!")
-        } else alert(result.message)
+            alert("Xóa thành công!")
+          } else alert(result.message)
           this.refreshList()
         } catch (error) {
           alert(error.response.data.message)
